@@ -12,4 +12,9 @@ class Dialouge extends Model
     protected $fillable = [
         'cast_id', 'dialouge', 'start', 'end'
     ];
+
+    public function cast()
+    {
+        return $this->belongsTo(Cast::class, 'cast_id', 'id');
+    }
 }

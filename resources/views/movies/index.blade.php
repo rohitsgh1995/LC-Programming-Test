@@ -18,6 +18,7 @@
         </style>
     </head>
     <body class="d-flex flex-column h-100">
+
         <header>
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -29,51 +30,63 @@
                 </div>
             </nav>
         </header>
+
         <!-- Begin page content -->
         <main class="flex-shrink-0">
             <div class="container" style="padding: 90px 10px 0;">
-                <div class="row g-0 mb-5">
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card">
-                            <img class="card-img-top" src="{{ asset('assets/img/movie.jpg') }}" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Avengers</h5>
-                                <p class="card-text">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">2h 30m</small>
-                                    <div class="d-flex gap-3 align-items-center">
-                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
-                                        <button type="button" class="btn btn-outline-danger">Delete</button>
+
+                @forelse ($movies as $m)                    
+                    <div class="row g-0 mb-5">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ asset('assets/img/movie.jpg') }}" alt="{{ $m->name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $m->name }}</h5>
+                                    <p class="card-text">
+                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">2h 30m</small>
+                                        <div class="d-flex gap-3 align-items-center">
+                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
+                                            <button type="button" class="btn btn-outline-danger">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-xl-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Casts</h5>
-                                <div class="px-3">
-                                    <div class="center slider">
-                                        <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <img class="mb-1" src="{{ asset('assets/img/user.png') }}" width="50">
-                                            <strong>Iron Man</strong>
-                                            <small class="text-wrap">Robert Downey Junior</small>
-                                            <small>(M)</small>
-                                        </div>                                        
+                        <div class="col-md-6 col-xl-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Casts</h5>
+                                    <div class="px-3">
+                                        <div class="center slider">
+                                            @forelse ($m->casts as $mc)
+                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                    <img class="mb-1" src="{{ asset('assets/img/user.png') }}" width="50">
+                                                    <strong>{{ $mc->character_name }}</strong>
+                                                    <small class="text-wrap">{{ $mc->name }}</small>
+                                                    <small>({{ $mc->gender }})</small>
+                                                </div>
+                                            @empty
+                                                
+                                            @endforelse
+                                                                                    
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <h5 class="card-title">Dialouges</h5>
-                                <div class="d-flex justify-content-between align-items-center" style="height: 32.3vh; max-height: 32.3vh; overflow-y: scroll;">
-                                    
-                                </div>
-                            </div>                            
+                                    <hr>
+                                    <h5 class="card-title">Dialouges</h5>
+                                    <div class="d-flex justify-content-between align-items-center" style="height: 32.3vh; max-height: 32.3vh; overflow-y: scroll;">
+                                        {{ json_encode($m->dialouges) }}
+                                    </div>
+                                </div>                            
+                            </div>
                         </div>
                     </div>
-                </div>
+                @empty
+                    
+                @endforelse
+
             </div>
         </main>
         

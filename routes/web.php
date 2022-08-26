@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('movies.index');
-});
+// Route::get('/', function () {
+//     return view('movies.index');
+// });
+
+Route::resource('/', \App\Http\Controllers\MovieController::class);

@@ -12,4 +12,14 @@ class Movie extends Model
     protected $fillable = [
         'name', 'duration'
     ];
+
+    public function casts()
+    {
+        return $this->hasMany(Cast::class, 'movie_id', 'id');
+    }
+
+    public function dialouges()
+    {
+        return $this->hasManyThrough(Dialouge::class, Cast::class)->with('cast')->orderBy('start');
+    }
 }

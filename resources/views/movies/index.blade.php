@@ -23,7 +23,9 @@
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div class="container">
                     <span class="navbar-brand">Movies</span>
-                    <button class="btn btn-success">Create Movie</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createMovie">
+                        Create Movie
+                    </button>
                 </div>
             </nav>
         </header>
@@ -42,7 +44,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">2h 30m</small>
                                     <div class="d-flex gap-3 align-items-center">
-                                        <button type="button" class="btn btn-outline-warning">Edit</button>
+                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
                                         <button type="button" class="btn btn-outline-danger">Delete</button>
                                     </div>
                                 </div>
@@ -74,6 +76,45 @@
                 </div>
             </div>
         </main>
+        
+        <!-- Create Modal -->
+        <div class="modal fade" id="createMovie" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createMovieLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createMovieLabel">Create Movie</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editMovie" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editMovieLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editMovieLabel">Edit Movie</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info">Update</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer mt-auto py-1 bg-dark">
             <div class="container text-center">
                 <span class="text-muted">Developed by Rohit Singh</span>

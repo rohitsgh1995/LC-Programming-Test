@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MovieController extends Controller
 {
@@ -26,7 +27,7 @@ class MovieController extends Controller
      */
     public function create()
     {
-        //
+        return view('movies.create');
     }
 
     /**
@@ -37,7 +38,27 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'movieName' => 'required',
+            'movieDuration' => 'required',
+            'cast.*.name' => 'required',
+            'cast.*.gender' => 'required',
+            'cast.*.character' => 'required',
+        ],
+        [
+            'movieName.required' => 'Movie name is required.',
+            'movieDuration.required' => 'Movie duration is required.',
+            'cast.*.name.required' => 'Cast name is required.',
+            'cast.*.gender.required' => 'Cast gender is required.',
+            'cast.*.character.required' => 'Cast character is required.',
+        ]);
+        
+        $create = Movie::create([
+            'name' => $request->movieName,
+            'duration' => $request->movieDuration
+        ]);     
+
+        return redirect()->route('movies')->with('success', 'New movie created successfully.');
     }
 
     /**

@@ -23,10 +23,10 @@
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div class="container">
-                    <span class="navbar-brand">Movies</span>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createMovie">
+                    <a href="{{ route('movies') }}" class="navbar-brand">Movies</a>
+                    <a href="{{ route('movie.create') }}" class="btn btn-success">
                         Create Movie
-                    </button>
+                    </a>
                 </div>
             </nav>
         </header>
@@ -40,7 +40,7 @@
             </div>
         </main>
         
-        <footer class="footer mt-auto py-1 bg-dark">
+        <footer class="footer mt-auto py-2 bg-dark">
             <div class="container text-center">
                 <span class="text-muted">Developed by Rohit Singh</span>
             </div>
@@ -82,5 +82,7 @@
                 });
             });
         </script>
+
+        @stack('footerScripts')
     </body>
 </html>

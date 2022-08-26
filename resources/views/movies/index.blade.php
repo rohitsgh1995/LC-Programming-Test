@@ -2,6 +2,12 @@
 
 @section('content')
 
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
+
     @forelse ($movies as $m)                    
         <div class="row g-0 mb-5">
             <div class="col">

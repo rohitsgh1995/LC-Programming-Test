@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MovieController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('movies.index');
-// });
-
-Route::resource('/', \App\Http\Controllers\MovieController::class);
+Route::get('/', [MovieController::class, 'index'])->name('movies');
+Route::get('/create', [MovieController::class, 'create'])->name('movie.create');
+Route::post('/store', [MovieController::class, 'store'])->name('movie.store');

@@ -16,7 +16,11 @@ use App\Http\Controllers\MovieController;
 Route::get('/', \App\Http\Livewire\Movies\Index::class)->name('movies');
 Route::get('/create', \App\Http\Livewire\Movies\Create::class)->name('movie.create');
 Route::post('/store', [MovieController::class, 'store'])->name('movie.store');
+Route::get('/edit/{movie_id}', \App\Http\Livewire\Movies\Edit::class)->name('movie.edit');
 Route::delete('/delete/{movie}', [MovieController::class, 'destroy'])->name('movie.delete');
+
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

@@ -7,6 +7,13 @@
         </div>
     @endif
 
+    @if ($message = Session::get('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p class="m-0 p-0">{{ $message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     @forelse ($movies as $m)                    
         <div class="row g-0 mb-5">
             <div class="col">
@@ -24,7 +31,7 @@
                                     @method('DELETE')
                                     <small class="text-muted">{{ $this->setTime($m->duration, '%02dh %02dm') }}</small>
                                     <div class="d-flex gap-3 align-items-center">
-                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
+                                        <a href="{{ route('movie.edit', ['movie_id' => $m->id]) }}" class="btn btn-outline-warning">Edit</a>
                                         <button type="submit" class="btn btn-outline-danger">Delete</button>
                                     </div>
                                 </form>

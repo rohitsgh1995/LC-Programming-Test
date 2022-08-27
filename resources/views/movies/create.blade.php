@@ -31,8 +31,8 @@
                 @enderror
             </div>    
             <div class="col-xs-12 col-sm-12 col-md-6">
-                <label for="movieDuration" class="form-label">Movie Duration</label>
-                <input type="time" class="form-control @error('movieDuration') is-invalid @enderror" name="movieDuration" id="movieDuration">
+                <label for="movieDuration" class="form-label">Movie Duration (in Mins)</label>
+                <input type="number" class="form-control @error('movieDuration') is-invalid @enderror" name="movieDuration" id="movieDuration" placeholder="Enter movie duration (in minutes)." value="{{ old('movieDuration') }}">
                 @error('movieDuration')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror

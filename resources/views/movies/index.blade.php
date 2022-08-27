@@ -2,6 +2,18 @@
 
 @section('content')
 
+    @php
+        function setTime($time, $format = '%02d:%02d')
+        {
+            if ($time < 1) {
+                return;
+            }
+            $hours = floor($time / 60);
+            $minutes = ($time % 60);
+            return sprintf($format, $hours, $minutes);
+        }
+    @endphp
+
     @if ($message = Session::get('success'))
         <div class="alert alert-success">
             <p>{{ $message }}</p>
@@ -20,13 +32,15 @@
                                 <p class="card-text">
                                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                                 </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">2h 30m</small>
+                                <form action="{{ route('movie.delete', ['movie' => $m->id]) }}" method="POST" class="d-flex justify-content-between align-items-center">
+                                    @csrf
+                                    @method('DELETE')
+                                    <small class="text-muted">{{ setTime($m->duration, '%02dh %02dm') }}</small>
                                     <div class="d-flex gap-3 align-items-center">
                                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
-                                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

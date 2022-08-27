@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Cast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -56,8 +57,18 @@ class MovieController extends Controller
         $create = Movie::create([
             'name' => $request->movieName,
             'duration' => $request->movieDuration
-        ]);     
+        ]);
 
+        foreach($request->cast as $c)
+        {
+            Cast::create([
+                'movie_id' => $create->id,
+                'character_name' => $c['character'],
+                'name' => $c['name'],
+                'gender' => $c['gender']
+            ]);
+        }
+        
         return redirect()->route('movies')->with('success', 'New movie created successfully.');
     }
 
@@ -103,6 +114,9 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        //
+        // dd($movie);
+        $movie->delete();
+
+        return redirect()->route('movies')->with('success', 'Movie deleted successfully.');
     }
 }

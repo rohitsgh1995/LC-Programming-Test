@@ -16,6 +16,8 @@
         <style>
             .slick-prev::before, .slick-next::before{color: #000 !important;}
         </style>
+
+        @stack('headerCSS')
         <!-- Styles -->
         @livewireStyles
 

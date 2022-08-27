@@ -15,6 +15,7 @@ class CreateDialougesTable extends Migration
     {
         Schema::create('dialouges', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('movie_id')->constrained('movies')->onDelete('cascade');
             $table->foreignId('cast_id')->constrained('casts')->onDelete('cascade');
             $table->text('dialouge');
             $table->time('start', $precision = 3)->nullable();

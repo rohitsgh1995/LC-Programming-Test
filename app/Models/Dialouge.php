@@ -10,7 +10,7 @@ class Dialouge extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cast_id', 'dialouge', 'start', 'end'
+        'movie_id', 'cast_id', 'dialouge', 'start', 'end'
     ];
 
     public function cast()

@@ -20,7 +20,7 @@
         @livewireStyles
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/app.js'])
     </head>
     <body class="d-flex flex-column h-100">
 
@@ -38,14 +38,12 @@
 
         <!-- Begin page content -->
         <main class="flex-shrink-0">
-            <div class="container" style="padding: 90px 10px 0;">
-
+            
                 {{ $slot }}
             
-            </div>
         </main>
         
-        <footer class="footer mt-auto py-2 bg-dark">
+        <footer class="footer fixed-bottom mt-auto py-2 bg-dark">
             <div class="container text-center">
                 <span class="text-muted">Developed by Rohit Singh</span>
             </div>

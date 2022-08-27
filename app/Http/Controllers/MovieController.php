@@ -16,9 +16,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movies = Movie::with(['casts', 'dialouges'])->orderBy('id', 'desc')->get();
-        
-        return view('movies.index', compact('movies'));
+        //
     }
 
     /**
@@ -28,7 +26,7 @@ class MovieController extends Controller
      */
     public function create()
     {
-        return view('movies.create');
+        //
     }
 
     /**
@@ -114,7 +112,6 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        // dd($movie);
         $movie->delete();
 
         return redirect()->route('movies')->with('success', 'Movie deleted successfully.');

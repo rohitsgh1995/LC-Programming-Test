@@ -1,22 +1,9 @@
-@extends('layouts.app')
-
-@section('content')
-
-    @php
-        function setTime($time, $format = '%02d:%02d')
-        {
-            if ($time < 1) {
-                return;
-            }
-            $hours = floor($time / 60);
-            $minutes = ($time % 60);
-            return sprintf($format, $hours, $minutes);
-        }
-    @endphp
+<div class="container" style="padding: 90px 10px 0;">
 
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p class="m-0 p-0">{{ $message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
@@ -35,7 +22,7 @@
                                 <form action="{{ route('movie.delete', ['movie' => $m->id]) }}" method="POST" class="d-flex justify-content-between align-items-center">
                                     @csrf
                                     @method('DELETE')
-                                    <small class="text-muted">{{ setTime($m->duration, '%02dh %02dm') }}</small>
+                                    <small class="text-muted">{{ $this->setTime($m->duration, '%02dh %02dm') }}</small>
                                     <div class="d-flex gap-3 align-items-center">
                                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editMovie">Edit</button>
                                         <button type="submit" class="btn btn-outline-danger">Delete</button>
@@ -100,11 +87,10 @@
         <div class="row">
             <div class="col p-5 d-flex flex-column gap-3 justify-content-center align-items-center">
                 <h5 class="text-muted">No movies found</h5>
-                <button type="button" class="btn btn-lg btn-success" data-bs-toggle="modal" data-bs-target="#createMovie">
+                <a href="{{ route('movie.create') }}" class="btn btn-lg btn-success">
                     Create Movie
-                </button>
+                </a>
             </div>
         </div>
     @endforelse
-
-@endsection
+</div>

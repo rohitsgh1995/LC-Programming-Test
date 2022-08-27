@@ -13,7 +13,7 @@ use App\Http\Controllers\MovieController;
 |
 */
 
-Route::get('/', [MovieController::class, 'index'])->name('movies');
+Route::get('/', \App\Http\Livewire\Movies\Index::class)->name('movies');
 Route::get('/create', [MovieController::class, 'create'])->name('movie.create');
 Route::post('/store', [MovieController::class, 'store'])->name('movie.store');
 Route::delete('/delete/{movie}', [MovieController::class, 'destroy'])->name('movie.delete');

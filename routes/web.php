@@ -17,3 +17,12 @@ Route::get('/', [MovieController::class, 'index'])->name('movies');
 Route::get('/create', [MovieController::class, 'create'])->name('movie.create');
 Route::post('/store', [MovieController::class, 'store'])->name('movie.store');
 Route::delete('/delete/{movie}', [MovieController::class, 'destroy'])->name('movie.delete');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

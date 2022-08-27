@@ -1,4 +1,4 @@
-<div class="container" style="padding: 90px 10px 0;">
+<div class="container" style="padding: 90px;">
 
     @if ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">

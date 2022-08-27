@@ -26,15 +26,13 @@
                                 <p class="card-text">
                                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                                 </p>
-                                <form action="{{ route('movie.delete', ['movie' => $m->id]) }}" method="POST" class="d-flex justify-content-between align-items-center">
-                                    @csrf
-                                    @method('DELETE')
+                                <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">{{ $this->setTime($m->duration, '%02dh %02dm') }}</small>
                                     <div class="d-flex gap-3 align-items-center">
                                         <a href="{{ route('movie.edit', ['movie_id' => $m->id]) }}" class="btn btn-outline-warning">Edit</a>
-                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                        <button wire:click="destroy({{ $m->id }})" class="btn btn-outline-danger">Delete</button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

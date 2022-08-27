@@ -23,4 +23,11 @@ class Index extends Component
         $minutes = ($time % 60);
         return sprintf($format, $hours, $minutes);
     }
+
+    public function destroy(Movie $movie)
+    {
+        $movie->delete();
+
+        return redirect()->route('movies')->with('success', 'Movie deleted successfully.');
+    }
 }

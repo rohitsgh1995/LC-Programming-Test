@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <label class="form-label">Dialouge</label>
                         <textarea rows="3" class="form-control @error('casts.'.$key.'.dialougeList.'.$d_key.'.dialouge') is-invalid @enderror" placeholder="Enter dialouge" 
-                        wire:model="casts.{{ $key }}.dialougeList.{{ $key }}.dialouge"></textarea>
+                        wire:model="casts.{{ $key }}.dialougeList.{{ $d_key }}.dialouge"></textarea>
                         @error('casts.'.$key.'.dialougeList.'.$d_key.'.dialouge') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
                     </div>
                 </div>

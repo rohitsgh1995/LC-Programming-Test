@@ -12,4 +12,9 @@ class Cast extends Model
     protected $fillable = [
         'movie_id', 'character_name', 'name', 'gender'
     ];
+
+    public function dialouges()
+    {
+        return $this->hasMany(Dialouge::class, 'cast_id', 'id');
+    }
 }

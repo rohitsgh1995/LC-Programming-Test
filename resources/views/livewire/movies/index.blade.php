@@ -1,3 +1,11 @@
+@push('headerCSS')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/slick/slick.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/slick/slick-theme.css') }}">
+    <style>
+        .slick-prev::before, .slick-next::before{color: #000 !important;}
+    </style>
+@endpush
+
 <div class="container" style="padding: 90px 15px;">
 
     @if ($message = Session::get('success'))
@@ -64,7 +72,7 @@
                                             <li class="list-group-item d-flex justify-content-start align-items-start py-3">
                                                 <div class="ms-2 me-auto w-100 d-flex flex-column justify-content-between align-items-start">
                                                     <div class="d-flex w-100 justify-content-between align-items-start">
-                                                        <div class="fw-bold">{{ $md->cast->character_name }}</div>
+                                                        <div class="fw-bold">{{ $md->cast->character_name ?? 'Character not assigned' }}</div>
                                                         <div class="d-flex gap-3 justify-content-center align-items-center">
                                                             <span class="badge bg-success rounded-pill" title="Start Time">{{ $md->start }}</span>
                                                             <span class="badge bg-danger rounded-pill" title="End Time">{{ $md->end }}</span>
@@ -99,3 +107,40 @@
         </div>
     @endforelse
 </div>
+
+@push('footerScripts')
+    <script src="{{ asset('assets/slick/slick.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).on('ready', function() {
+            $(".center").slick({
+                dots: false,
+                infinite: true,
+                centerMode: false,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                responsive: [
+                    {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                    },
+                    {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                    },
+                    {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                    }
+                    }
+                ]
+            });
+        });
+    </script>
+@endpush

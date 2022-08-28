@@ -20,6 +20,6 @@ class Movie extends Model
 
     public function dialouges()
     {
-        return $this->hasManyThrough(Dialouge::class, Cast::class)->with('cast')->orderBy('start');
+        return $this->hasMany(Dialouge::class, 'movie_id', 'id')->with('cast')->orderBy('start');
     }
 }

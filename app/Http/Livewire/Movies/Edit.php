@@ -29,6 +29,7 @@ class Edit extends Component
             foreach($find_movie->casts as $fmc)
             {
                 $this->casts[] = [
+                    'id' => $fmc->id,
                     'name' => $fmc->name,
                     'gender' => $fmc->gender,
                     'character' => $fmc->character_name
@@ -38,8 +39,9 @@ class Edit extends Component
             foreach($find_movie->dialouges as $fmd)
             {
                 $this->dialougeList[] = [
+                    'id' => $fmd->id,
                     'dialouge' => $fmd->dialouge,
-                    'character' => $fmd->cast->character_name,
+                    'character' => $fmd->cast->character_name ?? '',
                     'start' => $fmd->start,
                     'end' => $fmd->end
                 ];
@@ -67,22 +69,30 @@ class Edit extends Component
 
     public function addCastField()
     {
-        $this->casts[] = ['name' => '', 'gender' => '', 'character' => ''];
+        $this->casts[] = ['id' => '', 'name' => '', 'gender' => '', 'character' => ''];
     }
 
     public function removeCastField($key)
     {
+        if(!empty($this->casts[$key]['id']) && Cast::where('id', $this->casts[$key]['id'])->exists())
+        {
+            Cast::where('id', $this->casts[$key]['id'])->delete();
+        }
         unset($this->casts[$key]);
         $this->casts = array_values($this->casts);
     }
 
     public function addDialougeFields()
     {
-        $this->dialougeList[] = ['dialouge' => '', 'character' => '', 'start' => '00:00:00.000', 'end' => '00:00:00.000'];
+        $this->dialougeList[] = ['id' => '', 'dialouge' => '', 'character' => '', 'start' => '00:00:00.000', 'end' => '00:00:00.000'];
     }
 
     public function removeDialougeFields($key)
     {
+        if(!empty($this->dialougeList[$key]['id']) && Dialouge::where('id', $this->dialougeList[$key]['id'])->exists())
+        {
+            Dialouge::where('id', $this->dialougeList[$key]['id'])->delete();
+        }
         unset($this->dialougeList[$key]);
         $this->dialougeList = array_values($this->dialougeList);
     }
@@ -122,29 +132,68 @@ class Edit extends Component
 
         if($update)
         {
-            Cast::where('movie_id', $this->movie_id)->delete();
-            Dialouge::where('movie_id', $this->movie_id)->delete();
-
             foreach($this->casts as $c)
             {
-                $set = Cast::create([
-                    'movie_id' => $this->movie_id,
-                    'character_name' => $c['character'],
-                    'name' => $c['name'],
-                    'gender' => $c['gender']
-                ]);
-
-                foreach($this->dialougeList as $dl)
+                if(!empty($c['id']) && Cast::where('id', $c['id'])->exists())
                 {
-                    if($dl['character'] === $c['character'])
+                    Cast::where('id', $c['id'])->where('movie_id', $this->movie_id)->update([
+                        'movie_id' => $this->movie_id,
+                        'character_name' => $c['character'],
+                        'name' => $c['name'],
+                        'gender' => $c['gender']
+                    ]);
+
+                    foreach($this->dialougeList as $dl)
                     {
-                        Dialouge::create([
-                            'movie_id' => $this->movie_id,
-                            'cast_id' => $set->id,
-                            'dialouge' => $dl['dialouge'],
-                            'start' => $dl['start'],
-                            'end' => $dl['end']
-                        ]);
+                        if(!empty($dl['id']) && Dialouge::where('cast_id', $c['id'])->where('movie_id', $this->movie_id)->exists())
+                        {
+                            if($dl['character'] === $c['character'])
+                            {
+                                Dialouge::where('cast_id', $c['id'])->where('movie_id', $this->movie_id)->update([
+                                    'movie_id' => $this->movie_id,
+                                    'cast_id' => $c['id'],
+                                    'dialouge' => $dl['dialouge'],
+                                    'start' => $dl['start'],
+                                    'end' => $dl['end']
+                                ]);
+                            }                            
+                        }
+                        else
+                        {
+                            if($dl['character'] === $c['character'])
+                            {
+                                Dialouge::create([
+                                    'movie_id' => $this->movie_id,
+                                    'cast_id' => $c['id'],
+                                    'dialouge' => $dl['dialouge'],
+                                    'start' => $dl['start'],
+                                    'end' => $dl['end']
+                                ]);
+                            }
+                        }                        
+                    }
+                }
+                else
+                {
+                    $set = Cast::create([
+                        'movie_id' => $this->movie_id,
+                        'character_name' => $c['character'],
+                        'name' => $c['name'],
+                        'gender' => $c['gender']
+                    ]);
+
+                    foreach($this->dialougeList as $dl)
+                    {
+                        if($dl['character'] === $c['character'])
+                        {
+                            Dialouge::create([
+                                'movie_id' => $this->movie_id,
+                                'cast_id' => $set->id,
+                                'dialouge' => $dl['dialouge'],
+                                'start' => $dl['start'],
+                                'end' => $dl['end']
+                            ]);
+                        }
                     }
                 }
             }

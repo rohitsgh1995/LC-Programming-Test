@@ -1,8 +1,3 @@
-@push('headerCSS')
-    {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.0/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.min.css"> --}}
-@endpush
-
 <div class="container" style="padding: 90px 15px;">
 
     <div class="row mb-5">
@@ -28,118 +23,101 @@
             @enderror
         </div>
     </div>
-    <div class="row g-0 mb-4">
-        <div class="col-12 mb-3">
-            <span class="badge bg-dark fs-6 px-5">Casts Details</span>
+
+    <hr style="height: 2px;">
+
+    @foreach($casts as $key => $value)
+        <div class="row g-2 mb-4">
+            <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
+                <span class="badge bg-dark fs-6 px-5">{{ $key + 1 }}. Casts Details</span>
+                <button class="btn btn-danger" title="Remove" wire:click.prevent="removeCastFields({{ $key }})">Remove Cast {{ $key + 1 }}</button>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="form-label">Cast Name</label>
+                    <input type="text" class="form-control @error('casts.'.$key.'.name') is-invalid @enderror" placeholder="Enter cast name" 
+                    wire:model="casts.{{ $key }}.name">                
+                    @error('casts.'.$key.'.name') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="form-label">Cast Gender</label>
+                    <select class="form-select @error('casts.'.$key.'.gender') is-invalid @enderror" wire:model="casts.{{ $key }}.gender">
+                        <option>-- Select Gender --</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Others</option>
+                    </select>
+                    @error('casts.'.$key.'.gender') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label class="form-label">Cast Character</label>
+                    <input type="text" class="form-control @error('casts.'.$key.'.character') is-invalid @enderror"  placeholder="Enter character name" 
+                    wire:model="casts.{{ $key }}.character">                
+                    @error('casts.'.$key.'.character') <div class="d-block invalid-feedback"> {{ $message }} </div> @enderror                
+                </div>
+            </div>
         </div>
-        <div class="col-12">
-            @foreach($casts as $key => $value)
-                <div class="row g-2 mb-4">
-                    <div class="col-xs-12 col-sm-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Cast Name</label>
-                            <input type="text" class="form-control @error('casts.'.$key.'.name') is-invalid @enderror" placeholder="Enter cast name" 
-                            wire:model="casts.{{ $key }}.name">                
-                            @error('casts.'.$key.'.name') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-3">
-                        <div class="form-group">
-                            <label class="form-label">Cast Gender</label>
-                            <select class="form-select @error('casts.'.$key.'.gender') is-invalid @enderror" wire:model="casts.{{ $key }}.gender">
-                                <option>-- Select Gender --</option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
-                                <option value="O">Others</option>
-                            </select>
-                            @error('casts.'.$key.'.gender') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-4">
-                        <div class="form-group">
-                            <label class="form-label">Cast Character</label>
-                            <input type="text" class="form-control @error('casts.'.$key.'.character') is-invalid @enderror"  placeholder="Enter character name" 
-                            wire:model="casts.{{ $key }}.character">                
-                            @error('casts.'.$key.'.character') <div class="d-block invalid-feedback"> {{ $message }} </div> @enderror                
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 d-flex justify-content-end align-items-center">
-                        <button class="btn btn-danger" title="Remove" wire:click.prevent="removeCastField({{$key}})">Remove Cast</button>
+        <div class="row g-2 ms-5">
+            <div class="col-12 mb-3">
+                <span class="badge bg-info fs-6 px-5">Dialouge List</span>
+            </div>
+        </div>
+
+        @foreach ($casts[$key]['dialougeList'] as $d_key => $d_value)
+            <div class="row ms-5 g-2 mb-4">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="form-label">Dialouge</label>
+                        <textarea rows="3" class="form-control @error('casts.'.$key.'.dialougeList.'.$d_key.'.dialouge') is-invalid @enderror" placeholder="Enter dialouge" 
+                        wire:model="casts.{{ $key }}.dialougeList.{{ $key }}.dialouge"></textarea>
+                        @error('casts.'.$key.'.dialougeList.'.$d_key.'.dialouge') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
                     </div>
                 </div>
-            @endforeach
-        </div>
-        <div class="col-12 d-flex justify-content-end align-items-center">
-            <button wire:click="addCastField" class="btn btn-success ms-2">Add New Cast</button>
-        </div>
-    </div>
-    <div class="row g-0 mb-4">
-        <div class="col-12 mb-3">
-            <span class="badge bg-dark fs-6 px-5">Dialouge List</span>
-        </div>
-        <div wire:ignore.self class="col-12">
-            @foreach($dialougeList as $key => $value)
-                <div class="row g-2 mb-4">
-                    <div class="col-5">
-                        <div class="form-group">
-                            <label class="form-label">Dialouge</label>
-                            <textarea rows="5" class="form-control @error('dialougeList.'.$key.'.dialouge') is-invalid @enderror" placeholder="Enter dialouge" 
-                            wire:model="dialougeList.{{ $key }}.dialouge"></textarea>
-                            @error('dialougeList.'.$key.'.dialouge') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
+                <div class="col-6 d-flex flex-column gap-3 justify-content-center align-items-center">
+                    <div class="form-group w-100">
+                        <label class="form-label">Start & End Time</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control @error('casts.'.$key.'.dialougeList.'.$d_key.'.start') is-invalid @enderror time-picker"
+                            wire:model="casts.{{ $key }}.dialougeList.{{ $d_key }}.start" wire:change.prevent="formatStartTime({{ $key }}, {{ $d_key }})">
+                            <input type="text" class="form-control @error('casts.'.$key.'.dialougeList.'.$d_key.'.end') is-invalid @enderror time-picker"
+                            wire:model="casts.{{ $key }}.dialougeList.{{ $d_key }}.end" wire:change.prevent="formatEndTime({{ $key }}, {{ $d_key }})">
                         </div>
+                        @error('casts.'.$key.'.dialougeList.'.$d_key.'.start') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror
+                        @error('casts.'.$key.'.dialougeList.'.$d_key.'.end') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror
                     </div>
-                    <div class="col-5 d-flex flex-column gap-3 justify-content-center align-items-center">
-                        <div class="form-group w-100">
-                            <label class="form-label">Character</label>
-                            <select class="form-select @error('dialougeList.'.$key.'.character') is-invalid @enderror" wire:model="dialougeList.{{ $key }}.character">
-                                <option>-- Select Character --</option>
-                                @forelse ($casts as $c)
-                                    <option value="{{ $c['character'] }}">{{ $c['character'] }}</option>
-                                @empty
-                                    <option>First add cast</option>
-                                @endforelse
-                            </select>
-                            @error('dialougeList.'.$key.'.character') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror                
-                        </div>
-                        <div class="form-group w-100">
-                            <label class="form-label">Start & End Time</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control @error('dialougeList.'.$key.'.start') is-invalid @enderror time-picker"
-                                wire:model.debounce.4000ms="dialougeList.{{ $key }}.start">
-                                <input type="text" class="form-control @error('dialougeList.'.$key.'.end') is-invalid @enderror time-picker"
-                                wire:model.debounce.4000ms="dialougeList.{{ $key }}.end">
-                            </div>
-                            @error('dialougeList.'.$key.'.start') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror
-                            @error('dialougeList.'.$key.'.end') <div class="d-block invalid-feedback"> {{ $message }} </div>@enderror
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-2 d-flex justify-content-end align-items-center">
-                        <button class="btn btn-danger" title="Remove" wire:click.prevent="removeDialougeFields({{$key}})">Remove Dialouge</button>
-                    </div>
+                    <button class="btn btn-warning" title="Remove" wire:click.prevent="removeDialougeFields({{ $key }}, {{ $d_key }})">Remove Dialouge</button>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
+
+        <div class="row g-2 ms-5">
+            <div class="col-12 mb-3">
+                <button wire:click="addDialougeFields({{ $key }})" class="btn btn-info">Add New Dialouge for Cast {{ $key + 1 }}</button>
+            </div>
         </div>
-        <div class="col-12 d-flex justify-content-end align-items-center">
-            <button wire:click="addDialougeFields" class="btn btn-success ms-2">Add New Dialouge</button>
+
+        <hr style="height: 2px;">
+
+    @endforeach
+
+    @if($errors->any())
+        <div class="row my-5">
+            <div class="col-xs-12 d-flex gap-3 justify-content-center">
+                <div class="w-100 text-center d-block invalid-feedback py-1" style="font-size: 1rem; background-color: #ff00001f;">Error occured in input fields.</div>
+            </div>
         </div>
-    </div>
+    @endif
     
-    <div class="row g-3 mb-4">
-        <div class="col-xs-12 text-center">
-            <button wire:click.prevent="createMovie" class="btn btn-primary btn-lg px-4">Save</button>
+    <div class="row my-5">
+        <div class="col-xs-12 d-flex gap-3 justify-content-center">
+            <button wire:click.prevent="addCastFields" class="btn btn-success ms-2">Add New Cast</button>
+            <button wire:click.prevent="createMovie" class="btn btn-primary btn-lg px-4">Create Movie</button>
+            <button wire:click.prevent="resetForm" class="btn btn-danger btn-lg px-4">Reset</button>
         </div>
-    </div>
+    </div>    
 
 </div>
-
-@push('footerScripts')
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-timepicker-addon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.ui.timepicker.addon/1.4.5/jquery-ui-sliderAccess.js"></script>
-    <script>
-        $('.time-picker').datetimepicker({
-            timepicker:false,
-            timeFormat: "H:m :s:l"
-        });
-    </script> --}}
-@endpush

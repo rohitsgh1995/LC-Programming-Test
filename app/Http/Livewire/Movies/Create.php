@@ -12,16 +12,22 @@ class Create extends Component
     public $movie_name, $movie_duration;
 
     public $casts = [];
-    public $dialougeList = [];
-
+    
     public function mount()
     {
         $this->casts = [
-            ['name' => '', 'gender' => '', 'character' => '']
-        ];
-
-        $this->dialougeList = [
-            ['dialouge' => '', 'character' => '', 'start' => '00:00:00.000', 'end' => '00:00:00.000']
+            [
+                'name' => '',
+                'gender' => '',
+                'character' => '',
+                'dialougeList' => [
+                    [
+                        'dialouge' => '',
+                        'start' => '00:00:00.000',
+                        'end' => '00:00:00.000'
+                    ]
+                ]
+            ]
         ];
     }
 
@@ -30,35 +36,51 @@ class Create extends Component
         return view('livewire.movies.create');
     }
 
-    public function updatedDialougeList()
+    public function formatStartTime($c_key, $d_key)
     {
-        foreach($this->dialougeList as $key => $value)
-        {
-            $this->dialougeList[$key]['start'] = date("H:i:s.v", strtotime($value['start']));
-            $this->dialougeList[$key]['end'] = date("H:i:s.v", strtotime($value['end']));
-        }
+        $this->casts[$c_key]['dialougeList'][$d_key]['start'] = date("H:i:s.v", strtotime($this->casts[$c_key]['dialougeList'][$d_key]['start']));
     }
 
-    public function addCastField()
+    public function formatEndTime($c_key, $d_key)
     {
-        $this->casts[] = ['name' => '', 'gender' => '', 'character' => ''];
+        $this->casts[$c_key]['dialougeList'][$d_key]['end'] = date("H:i:s.v", strtotime($this->casts[$c_key]['dialougeList'][$d_key]['end']));
     }
 
-    public function removeCastField($key)
+    public function addCastFields()
+    {
+        $this->casts[] = [
+            'name' => '',
+            'gender' => '',
+            'character' => '',
+            'dialougeList' => [
+                [
+                    'dialouge' => '',
+                    'start' => '00:00:00.000',
+                    'end' => '00:00:00.000'
+                ]
+            ]
+        ];
+    }
+
+    public function removeCastFields($key)
     {
         unset($this->casts[$key]);
         $this->casts = array_values($this->casts);
     }
 
-    public function addDialougeFields()
+    public function addDialougeFields($c_key)
     {
-        $this->dialougeList[] = ['dialouge' => '', 'character' => '', 'start' => '00:00:00.000', 'end' => '00:00:00.000'];
+        $this->casts[$c_key]['dialougeList'][] = [
+            'dialouge' => '',
+            'start' => '00:00:00.000',
+            'end' => '00:00:00.000'
+        ];
     }
 
-    public function removeDialougeFields($key)
+    public function removeDialougeFields($c_key, $d_key)
     {
-        unset($this->dialougeList[$key]);
-        $this->dialougeList = array_values($this->dialougeList);
+        unset($this->casts[$c_key]['dialougeList'][$d_key]);
+        $this->casts[$c_key]['dialougeList'] = array_values($this->casts[$c_key]['dialougeList']);
     }
 
     public function createMovie()
@@ -69,10 +91,10 @@ class Create extends Component
             'casts.*.name' => 'required',
             'casts.*.gender' => 'required',
             'casts.*.character' => 'required|distinct:strict,ignore_case',
-            'dialougeList.*.dialouge' => 'required',
-            'dialougeList.*.character' => 'required',
-            'dialougeList.*.start' => 'required|date_format:H:i:s.v|before:dialougeList.*.end',
-            'dialougeList.*.end' => 'required|date_format:H:i:s.v|after:dialougeList.*.start'
+            'casts.*.dialougeList.*.dialouge' => 'required',
+            // 'casts.*.dialougeList.*.character' => 'required',
+            'casts.*.dialougeList.*.start' => 'required|date_format:H:i:s.v|before:casts.*.dialougeList.*.end',
+            'casts.*.dialougeList.*.end' => 'required|date_format:H:i:s.v|after:casts.*.dialougeList.*.start'
         ],
         [
             'movie_name.required' => 'Movie name is required.',
@@ -81,12 +103,12 @@ class Create extends Component
             'casts.*.gender.required' => 'Cast gender is required.',
             'casts.*.character.required' => 'Cast character is required.',
             'casts.*.character.distinct' => 'Cast character field has a duplicate value.',
-            'dialougeList.*.dialouge.required' => 'Dialouge is required.',
-            'dialougeList.*.character.required' => 'Character is required.',
-            'dialougeList.*.start.required' => 'Start time is required.',
-            'dialougeList.*.start.before' => 'Start time must be  a time before end time.',
-            'dialougeList.*.end.required' => 'End time is required.',
-            'dialougeList.*.end.after' => 'End time must be a time after start time.'
+            'casts.*.dialougeList.*.dialouge.required' => 'Dialouge is required.',
+            // 'casts.*.dialougeList.*.character.required' => 'Character is required.',
+            'casts.*.dialougeList.*.start.required' => 'Start time is required.',
+            'casts.*.dialougeList.*.start.before' => 'Start time must be  a time before end time.',
+            'casts.*.dialougeList.*.end.required' => 'End time is required.',
+            'casts.*.dialougeList.*.end.after' => 'End time must be a time after start time.'
         ]);
 
         $create = Movie::create([
@@ -94,18 +116,18 @@ class Create extends Component
             'duration' => $this->movie_duration
         ]);
 
-        foreach($this->casts as $c)
+        if($create)
         {
-            $set = Cast::create([
-                'movie_id' => $create->id,
-                'character_name' => $c['character'],
-                'name' => $c['name'],
-                'gender' => $c['gender']
-            ]);
-
-            foreach($this->dialougeList as $dl)
+            foreach($this->casts as $c)
             {
-                if($dl['character'] === $c['character'])
+                $set = Cast::create([
+                    'movie_id' => $create->id,
+                    'character_name' => $c['character'],
+                    'name' => $c['name'],
+                    'gender' => $c['gender']
+                ]);
+
+                foreach($c['dialougeList'] as $dl)
                 {
                     Dialouge::create([
                         'movie_id' => $create->id,
@@ -116,8 +138,34 @@ class Create extends Component
                     ]);
                 }
             }
+
+            return redirect()->route('movies')->with('success', 'New movie created successfully.');
         }
+        else
+        {
+            return redirect()->route('movies')->with('error', 'Something went wrong.');
+        }      
+    }
+
+    public function resetForm()
+    {
+        $this->resetErrorBag();
         
-        return redirect()->route('movies')->with('success', 'New movie created successfully.');
-    }    
+        $this->movie_name = $this->movie_duration = '';
+
+        $this->casts = [
+            [
+                'name' => '',
+                'gender' => '',
+                'character' => '',
+                'dialougeList' => [
+                    [
+                        'dialouge' => '',
+                        'start' => '00:00:00.000',
+                        'end' => '00:00:00.000'
+                    ]
+                ]
+            ]
+        ];
+    }
 }
